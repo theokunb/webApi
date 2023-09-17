@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using webApi.Commands.CreateTask;
 using webApi.Commands.DeleteTask;
+using webApi.Commands.GetTask;
+using webApi.Commands.GetTaskList;
 using webApi.Commands.UpdateTask;
 using webApi.Mapper;
 
@@ -52,7 +54,8 @@ namespace webApi.DI
             services.AddScoped(typeof(CreateTaskValidator), typeof(CreateTaskValidator));
             services.AddScoped(typeof(UpdateTaskValidator), typeof(UpdateTaskValidator));
             services.AddScoped(typeof(DeleteTaskValidator), typeof(DeleteTaskValidator));
-            services.AddScoped(typeof(UpdateTaskValidator), typeof(UpdateTaskValidator));
+            services.AddScoped(typeof(GetTaskValidator), typeof(GetTaskValidator));
+            services.AddScoped(typeof(GetTaskListValidator), typeof(GetTaskListValidator));
 
             return services;
         }
