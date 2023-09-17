@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using webApi.Commands.CreateTask;
 using webApi.Commands.DeleteTask;
 using webApi.Commands.GetTask;
+using webApi.Commands.GetTaskList;
 using webApi.Commands.UpdateTask;
 
 namespace webApi.Controllers
@@ -34,7 +35,7 @@ namespace webApi.Controllers
 
             var result = await validator.ValidateAsync(command);
 
-            if(result.IsValid == false)
+            if (result.IsValid == false)
             {
                 return;
             }
@@ -76,7 +77,7 @@ namespace webApi.Controllers
             return 0;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<GetTaskViewModel> Get([AsParameters] int id, GetTaskValidator validator)
         {
             var command = new GetTaskCommand { Id = id };
@@ -90,6 +91,29 @@ namespace webApi.Controllers
             var taskVm = await _mediator.Send(command);
 
             return taskVm;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Entities.Task>> Get([AsParameters] string searchBy, string pattern, int pageIndex, int pageSize, GetTaskListValidator validator)
+        {
+            var command = new GetTaskListCommand
+            {
+                SerachBy = searchBy,
+                Pattern = pattern,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+
+            var result = await validator.ValidateAsync(command);
+
+            if (result.IsValid == false)
+            {
+                return default;
+            }
+
+            var res = await _mediator.Send(command);
+
+            return res;
         }
     }
 }
