@@ -6,7 +6,7 @@ namespace webApi.Commands.GetTaskList
     {
         public GetTaskListValidator() 
         {
-            RuleFor(command => command.SerachBy).NotEmpty();
+            RuleFor(command => command.SearchBy).NotEmpty();
             RuleFor(command => command.Pattern).NotEmpty();
             RuleFor(command => command.PageIndex).NotEmpty();
             RuleFor(command => command.PageSize).NotEmpty();

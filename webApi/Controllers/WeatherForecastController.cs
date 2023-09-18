@@ -94,11 +94,11 @@ namespace webApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Entities.Task>> Get([AsParameters] string searchBy, string pattern, int pageIndex, int pageSize, GetTaskListValidator validator)
+        public async Task<GetTaskListVm> Get([AsParameters] string searchBy, string pattern, int pageIndex, int pageSize, GetTaskListValidator validator)
         {
             var command = new GetTaskListCommand
             {
-                SerachBy = searchBy,
+                SearchBy = searchBy,
                 Pattern = pattern,
                 PageIndex = pageIndex,
                 PageSize = pageSize

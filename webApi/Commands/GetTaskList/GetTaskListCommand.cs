@@ -2,9 +2,9 @@
 
 namespace webApi.Commands.GetTaskList
 {
-    public class GetTaskListCommand : IRequest<IEnumerable<Entities.Task>>
+    public class GetTaskListCommand : IRequest<GetTaskListVm>
     {
-        public string SerachBy { get; set; }
+        public string SearchBy { get; set; }
         public string Pattern { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }

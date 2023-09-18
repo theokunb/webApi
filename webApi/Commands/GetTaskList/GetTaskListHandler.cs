@@ -3,25 +3,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace webApi.Commands.GetTaskList
 {
-    public class GetTaskListHandler : IRequestHandler<GetTaskListCommand, IEnumerable<Entities.Task>>
+    public class GetTaskListHandler : IRequestHandler<GetTaskListCommand, GetTaskListVm>
     {
         public ITaskDbContext _dbContext;
 
         public GetTaskListHandler(ITaskDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Entities.Task>> Handle(GetTaskListCommand request, CancellationToken cancellationToken)
+        public async Task<GetTaskListVm> Handle(GetTaskListCommand request, CancellationToken cancellationToken)
         {
             var res = await _dbContext
                     .Tasks
-                    .FromSql($"SELECT * FROM Tasks WHERE {request.SerachBy} LIKE '%{request.Pattern}%'")
                     .ToListAsync(cancellationToken);
 
-            res = res.Skip(request.PageSize * request.PageIndex - 1)
-                .Take(request.PageSize)
+            var property = typeof(Entities.Task).GetProperty(request.SearchBy);
+
+            var filteredRes = res
+                .Where(task => property.GetValue(task).ToString().Contains(request.Pattern))
                 .ToList();
 
 
-            return res;
+            var pagedRes = filteredRes.Skip(request.PageSize * (request.PageIndex - 1))
+                .Take(request.PageSize)
+                .ToList();
+
+            var vm = new GetTaskListVm
+            {
+                Tasks = pagedRes,
+                PageSize = request.PageSize,
+                PageIndex = request.PageIndex,
+                TotalCount = filteredRes.Count()
+            };
+
+            return vm;
         }
     }
 }
