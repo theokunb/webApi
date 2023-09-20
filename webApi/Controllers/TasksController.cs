@@ -12,17 +12,12 @@ namespace webApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class TasksController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
-        public WeatherForecastController(IMapper mapper, IMediator mediator)
+        public TasksController(IMapper mapper, IMediator mediator)
         {
             _mapper = mapper;
             _mediator = mediator;
