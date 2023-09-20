@@ -15,12 +15,8 @@ namespace webApi.Commands.GetTaskList
                     .Tasks
                     .ToListAsync(cancellationToken);
 
-            var property = typeof(Entities.Task).GetProperty(request.SearchBy);
-
-            var filteredRes = res
-                .Where(task => property.GetValue(task).ToString().Contains(request.Pattern))
-                .ToList();
-
+            Filtrator filtrator = new(request.SearchBy, request.Pattern);
+            var filteredRes = filtrator.Filter(res);
 
             var pagedRes = filteredRes.Skip(request.PageSize * (request.PageIndex - 1))
                 .Take(request.PageSize)

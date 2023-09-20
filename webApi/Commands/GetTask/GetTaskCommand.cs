@@ -4,6 +4,6 @@ namespace webApi.Commands.GetTask
 {
     public class GetTaskCommand : IRequest<GetTaskViewModel>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

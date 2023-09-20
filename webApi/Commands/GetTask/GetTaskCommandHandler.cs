@@ -13,7 +13,7 @@ namespace webApi.Commands.GetTask
 
         public async Task<GetTaskViewModel> Handle(GetTaskCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Tasks.FirstOrDefaultAsync(task =>  task.Id == request.Id);
+            var entity = await _dbContext.Tasks.FirstOrDefaultAsync(task =>  task.Id == Convert.ToInt32(request.Id));
 
             var res = entity == null ? null : _mapper.Map<GetTaskViewModel>(entity);
 

@@ -2,7 +2,7 @@
 
 namespace webApi.Commands.UpdateTask
 {
-    public class UpdateTaskCommand : IRequest
+    public class UpdateTaskCommand : IRequest<Entities.Task>
     {
         public int Id { get; set; }
         public string Header { get; set; }

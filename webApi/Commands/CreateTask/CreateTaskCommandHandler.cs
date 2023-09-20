@@ -2,13 +2,13 @@
 
 namespace webApi.Commands.CreateTask
 {
-    public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, int>
+    public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Entities.Task>
     {
         private readonly ITaskDbContext _dbContext;
 
         public CreateTaskCommandHandler(ITaskDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<int> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+        public async Task<Entities.Task> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             var task = new Entities.Task
             {
@@ -23,7 +23,7 @@ namespace webApi.Commands.CreateTask
             await _dbContext.Tasks.AddAsync(task, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return task.Id;
+            return task;
         }
     }
 }

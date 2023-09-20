@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using webApi.Commands.CreateTask;
@@ -7,11 +6,12 @@ using webApi.Commands.DeleteTask;
 using webApi.Commands.GetTask;
 using webApi.Commands.GetTaskList;
 using webApi.Commands.UpdateTask;
+using webApi.Exceptions;
 
 namespace webApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TasksController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -24,63 +24,60 @@ namespace webApi.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody] CreateTaskDto taskDto, CreateTaskValidator validator)
+        public async Task<Entities.Task> Create([FromBody] CreateTaskDto taskDto, CreateTaskValidator validator)
         {
             var command = _mapper.Map<CreateTaskCommand>(taskDto);
+            var validationRes = await validator.ValidateAsync(command);
 
-            var result = await validator.ValidateAsync(command);
-
-            if (result.IsValid == false)
+            if (validationRes.IsValid == false)
             {
-                return;
+                throw new ValidationException(validationRes.Errors);
             }
 
-            await _mediator.Send(command);
+            var createdEntity = await _mediator.Send(command);
+            return createdEntity;
         }
 
         [HttpPut]
-        public async Task<int> Update([FromBody] UpdateTaskDto taskDto, UpdateTaskValidator validator)
+        public async Task<Entities.Task> Update([FromBody] UpdateTaskDto taskDto, UpdateTaskValidator validator)
         {
             var command = _mapper.Map<UpdateTaskCommand>(taskDto);
+            var validationRes = await validator.ValidateAsync(command);
 
-            var result = await validator.ValidateAsync(command);
-
-            if (result.IsValid == false)
+            if (validationRes.IsValid == false)
             {
-                return default;
+                throw new ValidationException(validationRes.Errors);
             }
 
-            await _mediator.Send(command);
-
-            return command.Id;
+            var updatedEntity = await _mediator.Send(command);
+            return updatedEntity;
         }
 
         [HttpDelete]
         public async Task<int> Delete([AsParameters] int id, DeleteTaskValidator validator)
         {
             var command = new DeleteTaskCommand { Id = id };
+            var validationRes = await validator.ValidateAsync(command);
 
-            var result = await validator.ValidateAsync(command);
-
-            if (result.IsValid == false)
+            if (validationRes.IsValid == false)
             {
-                return default;
+                throw new ValidationException(validationRes.Errors);
             }
 
             await _mediator.Send(command);
 
-            return 0;
+            return id;
         }
 
         [HttpGet("{id}")]
-        public async Task<GetTaskViewModel> Get([AsParameters] int id, GetTaskValidator validator)
+        public async Task<GetTaskViewModel> Get([AsParameters] string id, GetTaskValidator validator)
         {
             var command = new GetTaskCommand { Id = id };
-            var result = await validator.ValidateAsync(command);
+            var validationRes = await validator.ValidateAsync(command);
 
-            if (result.IsValid == false)
+            if (validationRes.IsValid == false)
             {
-                return default;
+                throw new ValidationException(validationRes.Errors);
             }
 
             var taskVm = await _mediator.Send(command);
@@ -89,7 +86,7 @@ namespace webApi.Controllers
         }
 
         [HttpGet]
-        public async Task<GetTaskListVm> Get([AsParameters] string searchBy, string pattern, int pageIndex, int pageSize, GetTaskListValidator validator)
+        public async Task<GetTaskListVm> Get([AsParameters]int pageIndex, int pageSize, GetTaskListValidator validator, string pattern = "", string searchBy = "")
         {
             var command = new GetTaskListCommand
             {
@@ -99,11 +96,11 @@ namespace webApi.Controllers
                 PageSize = pageSize
             };
 
-            var result = await validator.ValidateAsync(command);
+            var validationRes = await validator.ValidateAsync(command);
 
-            if (result.IsValid == false)
+            if (validationRes.IsValid == false)
             {
-                return default;
+                throw new ValidationException(validationRes.Errors);
             }
 
             var res = await _mediator.Send(command);
