@@ -5,7 +5,7 @@
 ## post
 Получает в теле запроса объект CreateTaskDto маппит в CreateTaskCommand и выполняет запись в бд
 
-https://localhost:7214/WeatherForecast
+https://localhost:7214/api/Tasks
 
 
 ```json
@@ -21,7 +21,7 @@ Body:
 ## put
 получает в теле запроса UpdateTaskDto маппит в UpdateTaskCommand ищет в бд таску, если есть, то вносит изменения в бд.
 
-  https://localhost:7214/WeatherForecast
+  https://localhost:7214/api/Tasks
 
 ```json
 Body:
@@ -37,7 +37,7 @@ Body:
 ## delete
 получает в качестве параметра id таски, если такая есть в бд, удаляет
 
-  https://localhost:7214/WeatherForecast?id=1
+  https://localhost:7214/api/Tasks?id=1
   
   Key = id, Value = 1
   
@@ -45,7 +45,7 @@ Body:
 ## get
 получает в качестве параметра id таски, если такая есть получает ее из бд и маппит в GetTaskListVm, возвращает клиенту
 
-  https://localhost:7214/Tasks/12
+  https://localhost:7214/api/Tasks/13
   
   Key = id, Value = 1
   
@@ -53,7 +53,7 @@ Body:
 ## get list
 получает в качестве параметров searchBy (поле) pattern (значение поля) pageIndex (номер страницы) pageSize (размер страницы). Получает объект GetTaskListVm и возращает клиенту
 
-https://localhost:7214/WeatherForecast?searchBy=Header&pattern=task&pageIndex=3&pageSize=2
+https://localhost:7214/api/Tasks?searchBy=Header&pattern=task&pageIndex=3&pageSize=2
 
   searchBy = Header
   
