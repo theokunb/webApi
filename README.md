@@ -1,5 +1,6 @@
 # webApi
-### Тестил в Постмане :shipit:
+> Выполнено на VS 2022, Проект Web api .NET7, используется бд MySQL
+> Тестил в Постмане :shipit:
 
 ## post
 Получает в теле запроса объект CreateTaskDto маппит в CreateTaskCommand и выполняет запись в бд
@@ -44,7 +45,7 @@ Body:
 ## get
 получает в качестве параметра id таски, если такая есть получает ее из бд и маппит в GetTaskListVm, возвращает клиенту
 
-  https://localhost:7214/WeatherForecast?id=1
+  https://localhost:7214/Tasks/12
   
   Key = id, Value = 1
   
